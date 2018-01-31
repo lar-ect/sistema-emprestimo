@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<!-- Configurações do meta para mobile -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="#f8f9fa">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="theme-color" content="#f8f9fa">
+	<script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
+	<!--
+	<link rel="icon" href="imagens/favicon.png">
+-->
+<!-- Bootstrap -->
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/estilo.css" rel="stylesheet">
+</head>
+<body>
+	<% include partes/navbar %>
+	<section class="conteudo-principal">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-2"></div>
+				<div class="col-md-8 col-xs-12">
+					<table class="table table-sm">
+						<thead style="text-align: center">
+							<tr>
+								<th>#</th>
+								<th>Nome</th>
+								<th>Editar</th>
+								<th>Apagar</th>
+							</tr>
+						</thead>
+						<tbody style="text-align: center;">
+							<tr>
+								<th scope="row">A12</th>
+								<td>Arduino</td>
+								<td><button type="button" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button></td>
+								<td><button type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></td>
+							</tr>
+							<tr>
+								<th scope="row">B23</th>
+								<td>Martelo</td>
+								<td><button type="button" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button></td>
+								<td><button type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></td>
+							</tr>
+							<tr>
+								<th scope="row">C45</th>
+								<td>ESP</td>
+								<td><button type="button" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button></td>
+								<td><button type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>	
+		</div>
+	</section>
+
+	<footer class="footer">
+		<div class="container">
+			©2018, Laboratório de Automação e Robótica. Todos os direitos reservados.<br>
+		</div>	
+	</footer>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			var flag = false;
+			if(!flag) $('#maisItem').hide();
+			$('#adicionarMaisItem').click(function(){
+				if(!flag){
+					$('#maisItem').fadeIn(1000);
+					flag = true;
+				}else{
+					$('#maisItem').fadeOut(1000);
+					flag = false;
+				}	
+			});
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<!-- Configurações do meta para mobile -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="#f8f9fa">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="theme-color" content="#f8f9fa">
+	<script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
+	<!--
+	<link rel="icon" href="imagens/favicon.png">
+-->
+<!-- Bootstrap -->
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/estilo.css" rel="stylesheet">
+</head>
+<body>
+	<% include partes/navbar %>
+	<section class="conteudo-principal">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-2"></div>
+				<div class="col-md-8">
+					<form>
+						<div class="form-group">
+							<label for="nomeEquipamento">Nome do equipamento:</label>
+							<input type="text" class="form-control" id="nomeEquipamento" placeholder="Digite o nome do equipamento">
+						</div>
+						<div class="form-group">
+							<label for="nomeEquipamento">Selecione um tipo:</label><br>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+								<label class="form-check-label" for="inlineRadio1">Chave de fenda</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+								<label class="form-check-label" for="inlineRadio2">Arduino</label>
+							</div>
+							<div id="adicionarMaisItem" class="form-check form-check-inline">
+								<i class="fas fa-plus"></i>
+							</div>
+						</div>
+						<div class="form-group" id="maisItem">
+							<label for="nomeEquipamento">Nome do novo tipo:</label>
+							<input type="text" class="form-control" id="nomeEquipamento" placeholder="Digite o nome aqui">
+						</div>
+						<div class="form-group">
+							<label for="nomeEquipamento">Este item pode ser emprestado:</label><br>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option1">
+								<label class="form-check-label" for="inlineRadio3">Sim</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option2">
+								<label class="form-check-label" for="inlineRadio4">Não</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<button type="submit" class="btn btn-secondary btn-block">Cadastrar</button>
+						</div>
+					</form>
+				</div>
+			</div>	
+		</div>
+	</section>
+
+	<footer class="footer">
+		<div class="container">
+			©2018, Laboratório de Automação e Robótica. Todos os direitos reservados.<br>
+		</div>	
+	</footer>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			var flag = false;
+			if(!flag) $('#maisItem').hide();
+			$('#adicionarMaisItem').click(function(){
+				if(!flag){
+					$('#maisItem').fadeIn(1000);
+					flag = true;
+				}else{
+					$('#maisItem').fadeOut(1000);
+					flag = false;
+				}	
+			});
+		});
+	</script>
+</body>
+</html>
