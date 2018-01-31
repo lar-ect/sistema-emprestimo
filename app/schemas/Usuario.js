@@ -1,4 +1,3 @@
-'use strict';
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const usuarioSchema = new mongoose.Schema({
@@ -6,4 +5,4 @@ const usuarioSchema = new mongoose.Schema({
     login:String,
     senha:String
 });
-module.export = mongoose.model('Usuario', usuarioSchema);
+module.export = mongoose.model('usuarios', usuarioSchema);

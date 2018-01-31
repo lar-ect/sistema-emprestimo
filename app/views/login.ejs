@@ -24,12 +24,15 @@
 	<section class="conteudo-principal">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-2"></div>
-				<div class="col-md-8">
+				<div class="col-md-3"></div>
+				<div class="col-md-6">
 					<form id="form-login">
 						<center>
 							<img src="img/logo.png" width="200px;" class="img-fluid" alt="Responsive image">
 						</center>
+						<div class="form-group" id="erros">
+
+						</div>
 						<div class="form-group">
 							<label for="exampleInputEmail1">Email</label>
 							<input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Digite seu email">
@@ -52,9 +55,9 @@
 		$(document).ready(function() {
 			$('#form-login').submit(function(event) {
 				event.preventDefault();
+				var html  = '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
 				var email = $('#email').val();
 				var senha = $('#senha').val();
-
 				var formData = new FormData();
 				formData.append("email", email);
 				formData.append("senha", senha);
@@ -67,7 +70,21 @@
 						}
 					}
 					if(xhr.readyState == 4 && xhr.status == 203){
-						alert("Usuário ou senhas inválidos.");
+						if(xhr.response.erroForm){
+							const msg = xhr.response.msg;
+							for(let i = 0; i<msg.length;i++) html += msg[i].msg + '<br>';
+							html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+    						html += '<span aria-hidden="true">&times;</span>';
+							html += '</button>';
+							$('#erros').append(html);  
+							return;
+						}
+						const msg = xhr.response.msg;
+						html += msg + '<br>';
+						html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+    					html += '<span aria-hidden="true">&times;</span>';
+						html += '</button>';
+						$('#erros').append(html); 
 					}
 				}
 				xhr.open("POST", "http://" + window.location.host+ "/login");

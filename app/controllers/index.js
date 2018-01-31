@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Usuario = mongoose.model('Usuario');
+const Usuario = mongoose.model('usuarios');
 const crypto = require('crypto');
 const sistema = require('../controllers/sistema.js');
 exports.viewIndex = (application,req,res) => {
@@ -10,6 +10,14 @@ exports.viewIndex = (application,req,res) => {
 	res.render('login');
 };
 exports.login = async (application,req,res) => {
+	req.assert('email', 'O email não pode ser vazio').notEmpty();
+	req.assert('senha', 'A senha não pode ser vazia').notEmpty();
+	var erros = req.validationErrors();
+    if(erros){
+		res.status(203).json({status:false,erroForm:true,msg:erros});
+		console.log(erros)
+        return;
+    }
 	const senhaCriptogafada = await crypto.createHash("md5").update(req.body.senha).digest("hex");
 	const findUser = await Usuario.findOne({login:req.body.email,senha:senhaCriptogafada});
 	if(findUser!==null){
@@ -18,7 +26,7 @@ exports.login = async (application,req,res) => {
 		return;
 	}else{
 		req.session.status = false;
-		res.status(203).json({status:false,msg:"Usuário não autorizado."});
+		res.status(203).json({status:false,msg:"Usuário ou senha incorretos."});
 		return;
 	}
 };
