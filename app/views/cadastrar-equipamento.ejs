@@ -85,6 +85,17 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="bootstrap/js/bootstrap.min.js"></script>
 	<script>
+		function getUrlVars(){
+			var vars = [], hash;
+			var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+			for(var i = 0; i < hashes.length; i++)
+			{
+				hash = hashes[i].split('=');
+				vars.push(hash[0]);
+				vars[hash[0]] = hash[1];
+			}
+			return vars;
+		}
 		$(document).ready(function() {
 			var flag = false;
 			if(!flag) $('#maisItem').hide();
@@ -97,10 +108,21 @@
 					flag = false;
 				}	
 			});
+			var status = getUrlVars()["status"];
+			var sucesso  = '<div class="alert alert-success alert-dismissible fade show" role="alert">';
+			if(status){
+				sucesso += "Item cadastrado com sucesso." + '<br>';
+				sucesso += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+				sucesso += '<span aria-hidden="true">&times;</span>';
+				sucesso += '</button></div>';
+				$('#conteudo').append(sucesso);
+				$('#nomeEquipamento').val('');
+				$('#tipoEquipamentoAdd').val('');
+				$("input:radio").removeAttr("checked");
+			}
 			$('#form-cadastro').submit(function(event) {
 				event.preventDefault();
 				$('#conteudo').empty();
-				var sucesso  = '<div class="alert alert-success alert-dismissible fade show" role="alert">';
 				var erro  = '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
 				var nomeEquipamento = $('#nomeEquipamento').val();
 				var emprestimo = $('input[name=emprestimo]:checked').val();
@@ -120,14 +142,7 @@
 				xhr.onreadystatechange = function(){
 					if(xhr.readyState == 4 && xhr.status == 200){
 						if(xhr.response.status){
-							sucesso += xhr.response.msg + '<br>';
-							sucesso += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
-    						sucesso += '<span aria-hidden="true">&times;</span>';
-							sucesso += '</button></div>';
-							$('#conteudo').append(sucesso);
-							$('#nomeEquipamento').val('');
-							$('#tipoEquipamentoAdd').val('');
-							$("input:radio").removeAttr("checked");
+							window.location.href = '/cadastrar-equipamento?status=true'
 						}
 					}
 					if(xhr.readyState == 4 && xhr.status == 203){

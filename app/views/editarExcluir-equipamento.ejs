@@ -25,36 +25,31 @@
 			<div class="row">
 				<div class="col-md-2"></div>
 				<div class="col-md-8 col-xs-12">
-					<table class="table table-sm">
-						<thead style="text-align: center">
-							<tr>
-								<th>#</th>
-								<th>Nome</th>
-								<th>Editar</th>
-								<th>Apagar</th>
-							</tr>
-						</thead>
-						<tbody style="text-align: center;">
-							<tr>
-								<th scope="row">A12</th>
-								<td>Arduino</td>
-								<td><button type="button" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button></td>
-								<td><button type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></td>
-							</tr>
-							<tr>
-								<th scope="row">B23</th>
-								<td>Martelo</td>
-								<td><button type="button" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button></td>
-								<td><button type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></td>
-							</tr>
-							<tr>
-								<th scope="row">C45</th>
-								<td>ESP</td>
-								<td><button type="button" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button></td>
-								<td><button type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></td>
-							</tr>
-						</tbody>
-					</table>
+					<div id="conteudo"></div>
+					<%if(equipamentos.length>0){%>
+						<table class="table table-sm">
+								<thead style="text-align: center">
+									<tr>
+										<th>#</th>
+										<th>Nome</th>
+										<th>Editar</th>
+										<th>Apagar</th>
+									</tr>
+								</thead>
+								<tbody style="text-align: center;">
+									<%for(let i = 0; i<equipamentos.length;i++){%>
+										<tr>
+											<th scope="row"><%=equipamentos[i].codigo%></th>
+											<td><%=equipamentos[i].nomeEquipamento%></td>
+											<td><button value="<%=equipamentos[i]._id%>" type="button" class="btn btn-primary btn-sm editar"><i class="fas fa-edit"></i></button></td>
+											<td><button value="<%=equipamentos[i]._id%>" type="button" class="btn btn-danger btn-sm excluir"><i class="fas fa-trash-alt"></i></button></td>
+										</tr>
+									<%}%>
+								</tbody>
+							</table>
+					<%}else{%>
+						<h1>Não existem equipamentos cadastrados</h1>
+					<%}%>	
 				</div>
 			</div>	
 		</div>
@@ -81,6 +76,56 @@
 					$('#maisItem').fadeOut(1000);
 					flag = false;
 				}	
+			});
+			function getUrlVars(){
+				var vars = [], hash;
+				var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+				for(var i = 0; i < hashes.length; i++)
+				{
+					hash = hashes[i].split('=');
+					vars.push(hash[0]);
+					vars[hash[0]] = hash[1];
+				}
+				return vars;
+			}
+			var status = getUrlVars()["status"];
+			var sucesso  = '<div class="alert alert-success alert-dismissible fade show" role="alert">';
+			var erro = '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
+			if(status){
+				sucesso += "Item removido com sucesso." + '<br>';
+				sucesso += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+				sucesso += '<span aria-hidden="true">&times;</span>';
+				sucesso += '</button></div>';
+				$('#conteudo').append(sucesso);
+				$('#nomeEquipamento').val('');
+				$('#tipoEquipamentoAdd').val('');
+				$("input:radio").removeAttr("checked");
+			}
+			$('.editar').click(function(){
+				const id = $(this).val();
+				window.location.href = '/editar-item/' + id;
+			});
+			$('.excluir').click(function(){
+				const id = $(this).val();
+				var xhr = new XMLHttpRequest();
+				xhr.responseType = 'json';
+				xhr.onreadystatechange = function(){
+					if(xhr.readyState == 4 && xhr.status == 200){
+						if(xhr.response.status){
+							window.location.href = '/editar-excluir-equipamento?status=true'
+						}
+					}
+					if(xhr.readyState == 4 && xhr.status == 203){
+						erro += xhr.response.msg + '<br>';
+						erro += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+    					erro += '<span aria-hidden="true">&times;</span>';
+						erro += '</button>';
+						$('#conteudo').append(erro);  
+						return;
+					}
+				}
+				xhr.open("DELETE", "http://" + window.location.host+ "/apagar-equipamento/"+id);
+				xhr.send();
 			});
 		});
 	</script>

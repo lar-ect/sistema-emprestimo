@@ -4,6 +4,8 @@ const Equipamentos = mongoose.model('equipamentos');
 const crypto = require('crypto');
 const autenticacao = require('../models/autenticacao.js');
 const unique = require('array-unique');
+const objectId = require('mongodb').ObjectID;
+
 exports.viewSistema = (application,req,res) => {
 	autenticacao.status(application,req,res);
 	res.render('index');
@@ -22,6 +24,11 @@ exports.viewCadastrarEquipamento = async (application,req,res) => {
 	for(let i =0; i<equipamentos.length;i++) arrayUniqueEquipamentos.push(equipamentos[i].tipoEquipamento);
 	unique(arrayUniqueEquipamentos);
 	res.render('cadastrar-equipamento',{equipamentos:arrayUniqueEquipamentos,tam:tamEquipamento});
+}
+
+exports.viewEditarExcluirEquipamento = async (application,req,res) => {
+	const equipamentos = await Equipamentos.find({});
+	res.render("editarExcluir-equipamento",{equipamentos:equipamentos});
 }
 
 exports.sair = (application,req,res) => {
@@ -72,7 +79,16 @@ exports.cadastrarEquipamento = async (application,req,res) => {
 		res.status(203).json({status:false,erroForm:true,msg:erros});
         return;
 	}
+	const equipamentos = await Equipamentos.find({});
+	let tamEquipamento = equipamentos.length;
+	req.body.codigo = "LAR"+tamEquipamento;
 	let newEquipamento = new Equipamentos(req.body);
 	let salvarEquipamento = await newEquipamento.save();
 	res.status(200).json({status:true,msg:"Equipamento cadastrado com sucesso."});
+}
+
+exports.apagarEquipamento = async (application,req,res) => {
+	const removerEquipamento = await Equipamentos.remove({_id:objectId(req.params.id)});
+	if(!removerEquipamento) res.status(203).json({status:false,msg:"Problema ao apagar arquivo."});
+	res.status(200).json({status:true});
 }
