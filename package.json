@@ -9,6 +9,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "array-unique": "^0.3.2",
     "body-parser": "1.18.2",
     "connect-multiparty": "2.1.0",
     "consign": "0.1.6",
