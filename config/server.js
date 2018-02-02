@@ -13,6 +13,7 @@ const expressValidator = require('express-validator');
 /* Importar o módulo do express-session. */
 const expressSession = require('express-session');
 
+const path = require('path');
 /* iniciar o objeto do express */
 const app = express();
 
@@ -24,7 +25,7 @@ app.set('view engine', 'ejs');
 app.set('views', './app/views');
 
 /* configurar o middleware express.static */
-app.use(express.static('./app/public'));
+app.use(express.static(path.join(__dirname, '../app/public')));
 
 /* configurar o middleware body-parser */
 app.use(bodyParser.urlencoded({extended:true}));
@@ -60,6 +61,5 @@ mongoose.Promise = global.Promise; // → queremos que o mongoose utilize promis
 mongoose.connection.on('error', err => {
   console.error(`🙅 🚫 → ${err.message}`);
 });
-
 /* exportar o objeto app */
 module.exports = app;
