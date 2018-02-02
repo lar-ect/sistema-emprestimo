@@ -111,7 +111,7 @@
 			}
 			$('.editar').click(function(){
 				const id = $(this).val();
-				window.location.href = '/editar-equipamento?id='+id;
+				window.location.href = '/inventario/editar-equipamento?id='+id;
 			});
 			$('.excluir').click(function(){
 				const id = $(this).val();
@@ -120,7 +120,7 @@
 				xhr.onreadystatechange = function(){
 					if(xhr.readyState == 4 && xhr.status == 200){
 						if(xhr.response.status){
-							window.location.href = '/editar-excluir-equipamento?status=true'
+							window.location.href = '/inventario/editar-excluir-equipamento?status=true'
 						}
 					}
 					if(xhr.readyState == 4 && xhr.status == 203){
@@ -132,7 +132,7 @@
 						return;
 					}
 				}
-				xhr.open("DELETE", "http://" + window.location.host+ "/apagar-equipamento/"+id);
+				xhr.open("DELETE", "http://" + window.location.host+"/inventario/apagar-equipamento/"+id);
 				xhr.send();
 			});
 		});

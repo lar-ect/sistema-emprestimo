@@ -142,7 +142,7 @@
 				xhr.onreadystatechange = function(){
 					if(xhr.readyState == 4 && xhr.status == 200){
 						if(xhr.response.status){
-							window.location.href = '/cadastrar-equipamento?status=true'
+							window.location.href = '/inventario/cadastrar-equipamento?status=true'
 						}
 					}
 					if(xhr.readyState == 4 && xhr.status == 203){
@@ -157,7 +157,7 @@
 						}	 
 					}
 				}
-				xhr.open("POST", "http://" + window.location.host+ ":3000/cadastrar-equipamento");
+				xhr.open("POST", "http://" + window.location.host+"/inventario/cadastrar-equipamento");
 				xhr.send(formData);
 			});
 		});

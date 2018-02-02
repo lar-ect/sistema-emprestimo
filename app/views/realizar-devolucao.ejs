@@ -76,7 +76,7 @@
 				event.preventDefault();
 				var nomePessoa = $('#nomePessoa').val();
 				var xhr = new XMLHttpRequest();
-				xhr.open("GET", "http://" + window.location.host+ "/emprestimos-ativos/" + nomePessoa);
+				xhr.open("GET", "http://" + window.location.host+ "/inventario/emprestimos-ativos/" + nomePessoa);
 				xhr.onload = function(){
 					if(xhr.status == 200){
 						var dados = JSON.parse(this.responseText);
@@ -90,7 +90,7 @@
 						}
 						$('.achados').click(function() {
 							const valor = $(this).val();
-							window.location.href = '/visualizar-emprestimos-ativos?cpf='+valor;
+							window.location.href = '/inventario/visualizar-emprestimos-ativos?cpf='+valor;
 						});
 					}
 					if(xhr.status == 404){

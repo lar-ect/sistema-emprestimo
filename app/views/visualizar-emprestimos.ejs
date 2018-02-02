@@ -130,7 +130,7 @@
 				xhr.onreadystatechange = function(){
 					if(xhr.readyState == 4 && xhr.status == 200){
 						if(xhr.response.status){
-							window.location.href = 'visualizar-emprestimos-ativos?status=true&cpf='+cpf;
+							window.location.href = '/inventario/visualizar-emprestimos-ativos?status=true&cpf='+cpf;
 						}
 					}
 					if(xhr.readyState == 4 && xhr.status == 203){
@@ -142,7 +142,7 @@
 						return;
 					}
 				}
-				xhr.open("POST", "http://" + window.location.host+ "/devolucao-equiamento");
+				xhr.open("POST", "http://" + window.location.host+ "/inventario/devolucao-equiamento");
 				xhr.send(formData);
 			});
 		});

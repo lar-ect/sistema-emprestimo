@@ -165,7 +165,7 @@
 				xhr.onreadystatechange = function(){
 					if(xhr.readyState == 4 && xhr.status == 200){
 						if(xhr.response.status){
-							window.location.href = '/editar-excluir-equipamento?edicao=true';
+							window.location.href = '/inventario/editar-excluir-equipamento?edicao=true';
 						}
 					}
 					if(xhr.readyState == 4 && xhr.status == 203){
@@ -180,7 +180,7 @@
 						}	 
 					}
 				}
-				xhr.open("POST", "http://" + window.location.host+ "/editar-equipamento");
+				xhr.open("POST", "http://" + window.location.host+"/inventario/editar-equipamento");
 				xhr.send(formData);
 			});
 		});
