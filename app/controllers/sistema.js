@@ -145,7 +145,7 @@ exports.editarEquipamento = async (application,req,res) => {
 
 exports.sair = (application,req,res) => {
 	autenticacao.status(application,req,res);
-	req.session.destroy((err) => res.redirect('/'));
+	req.session.destroy((err) => res.redirect('/inventario/'));
 };
 
 exports.criarUsuario = async (application,req,res) =>{
