@@ -22,6 +22,7 @@ exports.login = async (application,req,res) => {
 	const findUser = await Usuario.findOne({login:req.body.email,senha:senhaCriptogafada});
 	if(findUser!==null){
 		req.session.status = true;
+		req.session.nome = findUser.nome;
 		res.status(200).json({status:true,msg:"Usuário autorizado."});
 		return;
 	}else{

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Realizar emprestimo - Laboratório de automação e robótica da ECT.</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -25,7 +25,8 @@
 			<div class="row">
 				<div class="col-md-2"></div>
 				<div class="col-md-8">
-					<form>
+					<div id="conteudo"></div>
+					<form id="form-emprestimo">
 						<div class="form-group">
 							<label for="nomePessoa">Nome da pessoa:</label>
 							<input type="text" class="form-control" id="nomePessoa" placeholder="Digite o nome da pessoa">
@@ -44,10 +45,10 @@
 						</div>
 						<div class="form-group">
 							<label for="telefone">Código do equipamento:</label>
-							<input type="text" class="form-control" id="telefone" placeholder="Digite o código aqui">
+							<input type="text" class="form-control" id="codigo" placeholder="Digite o código aqui">
 						</div>
 						<div class="form-group">
-							<button type="submit" class="btn btn-secondary btn-block">Cadastrar</button>
+							<button type="submit" class="btn btn-secondary btn-block">Realizar emprestimo</button>
 						</div>
 					</form>
 				</div>
@@ -65,17 +66,68 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="bootstrap/js/bootstrap.min.js"></script>
 	<script>
+		function getUrlVars(){
+			var vars = [], hash;
+			var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+			for(var i = 0; i < hashes.length; i++)
+			{
+				hash = hashes[i].split('=');
+				vars.push(hash[0]);
+				vars[hash[0]] = hash[1];
+			}
+			return vars;
+		}
 		$(document).ready(function() {
-			var flag = false;
-			if(!flag) $('#maisItem').hide();
-			$('#adicionarMaisItem').click(function(){
-				if(!flag){
-					$('#maisItem').fadeIn(1000);
-					flag = true;
-				}else{
-					$('#maisItem').fadeOut(1000);
-					flag = false;
-				}	
+			var status = getUrlVars()["status"];
+			var sucesso  = '<div class="alert alert-success alert-dismissible fade show" role="alert">';
+			if(status){
+				sucesso += "Emprestimo realizado com sucesso." + '<br>';
+				sucesso += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+				sucesso += '<span aria-hidden="true">&times;</span>';
+				sucesso += '</button></div>';
+				$('#conteudo').append(sucesso);
+				$('#nomePessoa').val('');
+				$('#cpf').val('');
+				$('#email').val('');
+				$('#telefone').val('');
+				$('#codigo').val('');
+			}
+			$('#form-emprestimo').submit(function(event) {
+				event.preventDefault();
+				var erro = '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
+				var nomePessoa = $('#nomePessoa').val();
+				var cpf = $('#cpf').val();
+				var email = $('#email').val();
+				var telefone = $('#telefone').val();
+				var codigo = $('#codigo').val();
+				var formData = new FormData();
+				formData.append("nomePessoa", nomePessoa);
+				formData.append("cpf", cpf);
+				formData.append("email", email);
+				formData.append("telefone", telefone);
+				formData.append("codigo",codigo);
+				var xhr = new XMLHttpRequest();
+				xhr.responseType = 'json';
+				xhr.onreadystatechange = function(){
+					if(xhr.readyState == 4 && xhr.status == 200){
+						if(xhr.response.status){
+							window.location.href = '/realizar-emprestimo?status=true';
+						}
+					}
+					if(xhr.readyState == 4 && xhr.status == 203){
+						if(xhr.response.erroForm){
+							const msg = xhr.response.msg;
+							for(let i = 0; i<msg.length;i++) erro += msg[i].msg + '<br>';
+							erro += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+    						erro += '<span aria-hidden="true">&times;</span>';
+							erro += '</button>';
+							$('#conteudo').append(erro);  
+							return;
+						}	 
+					}
+				}
+				xhr.open("POST", "http://" + window.location.host+ "/realizar-emprestimo");
+				xhr.send(formData);
 			});
 		});
 	</script>

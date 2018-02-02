@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Vizualização equipamentos - Laboratório de automação e robótica da ECT.</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -89,6 +89,7 @@
 				return vars;
 			}
 			var status = getUrlVars()["status"];
+			var edicao = getUrlVars()["edicao"];
 			var sucesso  = '<div class="alert alert-success alert-dismissible fade show" role="alert">';
 			var erro = '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
 			if(status){
@@ -101,9 +102,16 @@
 				$('#tipoEquipamentoAdd').val('');
 				$("input:radio").removeAttr("checked");
 			}
+			if(edicao){
+				sucesso += "Item editado com sucesso." + '<br>';
+				sucesso += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+				sucesso += '<span aria-hidden="true">&times;</span>';
+				sucesso += '</button></div>';
+				$('#conteudo').append(sucesso);
+			}
 			$('.editar').click(function(){
 				const id = $(this).val();
-				window.location.href = '/editar-item/' + id;
+				window.location.href = '/editar-equipamento?id='+id;
 			});
 			$('.excluir').click(function(){
 				const id = $(this).val();
