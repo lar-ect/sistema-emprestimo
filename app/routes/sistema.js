@@ -15,6 +15,7 @@ module.exports = (application) => {
 	application.post('/cadastrar-usuario', (req,res) => sistema.criarUsuario(application,req,res));
 	application.post('/cadastrar-equipamento', (req,res) => sistema.cadastrarEquipamento(application,req,res));
 	application.post('/editar-equipamento', (req,res) => sistema.editarEquipamento(application,req,res));
-	
+	application.post('/devolucao-equiamento',(req,res) => sistema.devolver(application,req,res));
+
 	application.delete('/apagar-equipamento/:id', (req,res) => sistema.apagarEquipamento(application,req,res));
 };

@@ -8,9 +8,13 @@ const unique = require('array-unique');
 const objectId = require('mongodb').ObjectID;
 const matchSorter = require('match-sorter');
 
-exports.viewSistema = (application,req,res) => {
+exports.viewSistema = async (application,req,res) => {
 	autenticacao.status(application,req,res);
-	res.render('index');
+	const equipamentos = await Equipamentos.find({});
+	const tamEquipamento = equipamentos.length;
+	const emprestimos = await Emprestimos.find({status:true});
+	const tamEmprestimos = emprestimos.length;
+	res.render('index',{equipamentos:tamEquipamento,emprestimos:tamEmprestimos});
 };
 
 exports.viewCriarUsuario = (application,req,res) =>{
@@ -69,6 +73,8 @@ exports.realizarEmprestimo = async (application,req,res) => {
 	}
 	req.body.responsavel = req.session.nome;
 	req.body.status = true;
+	req.body.codigoEquipamento = req.body.codigo;
+	delete req.body.codigo;
 	let newEmprestimo = new Emprestimos(req.body);
 	await newEmprestimo.save();
 	res.status(200).json({status:true,msg:"Emprestimo realizado com sucesso."});
@@ -79,12 +85,25 @@ exports.viewDevolucao = async (application,req,res) => {
 	res.render('realizar-devolucao');
 };
 
+exports.devolver = async (application,req,res) => {
+	const id = req.body.id;
+	const realizarDevolucao = await Emprestimos.update({_id:objectId(id)},{$set:{status:false}});
+	res.status(200).json({status:true});
+	return
+};
+
 exports.buscarUsuariosComEmprestimosAtivos = async (application,req,res) =>{
 	const emprestimosAtivos = await Emprestimos.find({status:true});
 	var valoresNomes = matchSorter(emprestimosAtivos, req.params.nome, {keys: ['nomePessoa']})
 	res.status(200).json({status:true,emprestimos:valoresNomes});
 	return;
-}
+};
+
+exports.emprestimosAtivos = async (aplication,req,res) => {
+	const cpf = req.query.cpf;
+	const emprestimos = await Emprestimos.find({cpf:cpf});
+	res.render('visualizar-emprestimos',{emprestimos:emprestimos});
+};
 
 exports.editarEquipamento = async (application,req,res) => {
 	autenticacao.status(application,req,res);

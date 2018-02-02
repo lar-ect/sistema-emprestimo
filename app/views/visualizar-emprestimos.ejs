@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Realizar devolução - Laboratório de automação e robótica da ECT.</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<!-- Configurações do meta para mobile -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="#f8f9fa">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="theme-color" content="#f8f9fa">
+	<script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
+	<!--
+	<link rel="icon" href="imagens/favicon.png">
+-->
+<!-- Bootstrap -->
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/estilo.css" rel="stylesheet">
+</head>
+<body>
+	<% include partes/navbar %>
+	<section class="conteudo-principal">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-2"></div>
+				<div class="col-md-8 col-xs-12">
+                    <div id="conteudo"></div>
+                    <center><h4>Emprestimos ativos</h4></center><br>
+					<%if(emprestimos.length>0){%>
+						<table class="table table-sm">
+                            <thead style="text-align: center">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Responsável</th>
+                                    <th>Devolver</th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-align: center;">
+                                <%for(let i = 0; i<emprestimos.length;i++){%>
+                                    <%if(emprestimos[i].status){%>
+                                        <tr>
+                                            <th scope="row"><%=emprestimos[i].codigoEquipamento%></th>
+                                            <td><%=emprestimos[i].responsavel%></td>
+                                            <td><button value="<%=emprestimos[i]._id%>" type="button" class="btn btn-success btn-sm devolver">
+                                                <i class="fas fa-check-square"></i></button></td>
+                                        </tr>
+                                    <%}%>
+                                <%}%>
+                            </tbody>
+                        </table>
+					<%}else{%>
+						<h4>Não existem emprestimos para este usuário</h4>
+                    <%}%>
+                    <br>
+                    <hr>
+                    <center><h4>Histórico de emprestimos</h4></center><br>	
+                    <%if(emprestimos.length>0){%>
+						<table class="table table-sm">
+                            <thead style="text-align: center">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Responsável</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-align: center;">
+                                <%for(let i = 0; i<emprestimos.length;i++){%>
+                                    
+                                    <tr>
+                                        <th scope="row"><%=emprestimos[i].codigoEquipamento%></th>
+                                        <td><%=emprestimos[i].responsavel%></td>
+                                        <td>
+                                            <%if(!emprestimos[i].status){%>
+                                                Devolvido
+                                            <%}else{%>
+                                                Ainda emprestado
+                                            <%}%>
+                                        </td>
+                                    </tr>
+                                   
+                                <%}%>
+                            </tbody>
+                        </table>
+					<%}%>
+				</div>
+			</div>	
+		</div>
+	</section>
+
+	<footer class="footer">
+		<div class="container">
+			©2018, Laboratório de Automação e Robótica. Todos os direitos reservados.<br>
+		</div>	
+	</footer>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			function getUrlVars(){
+				var vars = [], hash;
+				var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+				for(var i = 0; i < hashes.length; i++)
+				{
+					hash = hashes[i].split('=');
+					vars.push(hash[0]);
+					vars[hash[0]] = hash[1];
+				}
+				return vars;
+			}
+            var status = getUrlVars()["status"];
+            var cpf = getUrlVars()["cpf"];
+			var sucesso  = '<div class="alert alert-success alert-dismissible fade show" role="alert">';
+			var erro = '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
+			if(status){
+				sucesso += "Item devolvido com sucesso." + '<br>';
+				sucesso += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+				sucesso += '<span aria-hidden="true">&times;</span>';
+                sucesso += '</button></div>';
+                $('#conteudo').append(sucesso);
+			}
+			$('.devolver').click(function(){
+                const id = $(this).val();
+                var formData = new FormData();
+				formData.append("id", id);
+				var xhr = new XMLHttpRequest();
+				xhr.responseType = 'json';
+				xhr.onreadystatechange = function(){
+					if(xhr.readyState == 4 && xhr.status == 200){
+						if(xhr.response.status){
+							window.location.href = 'visualizar-emprestimos-ativos?status=true&cpf='+cpf;
+						}
+					}
+					if(xhr.readyState == 4 && xhr.status == 203){
+						erro += xhr.response.msg + '<br>';
+						erro += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+    					erro += '<span aria-hidden="true">&times;</span>';
+						erro += '</button>';
+						$('#conteudo').append(erro);  
+						return;
+					}
+				}
+				xhr.open("POST", "http://" + window.location.host+ "/devolucao-equiamento");
+				xhr.send(formData);
+			});
+		});
+	</script>
+</body>
+</html>
